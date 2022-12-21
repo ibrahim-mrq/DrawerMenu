@@ -47,18 +47,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun initDrawerMenuList(binding: LayoutBackBinding) {
+    private fun initDrawerMenuList(backBinding: LayoutBackBinding) {
         val adapter = DrawerMenuAdapter(this)
-        binding.recyclerview.adapter = adapter
-        binding.recyclerview.setHasFixedSize(true)
-        binding.recyclerview.layoutManager = LinearLayoutManager(this)
+        adapter.listener = object : DrawerMenuAdapter.DrawerMenuInterface {
+            override fun onItemSelected(model: DrawerMenu, position: Int) {
+                binding.parent.closeMenu {
+                    Toast.makeText(this@MainActivity, "closeMenu", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        backBinding.recyclerview.adapter = adapter
+        backBinding.recyclerview.setHasFixedSize(true)
+        backBinding.recyclerview.layoutManager = LinearLayoutManager(this)
         val list = arrayListOf<DrawerMenu>()
-        list.add(DrawerMenu(R.drawable.ic_menu, "My Account"))
-        list.add(DrawerMenu(R.drawable.ic_menu, "Favorite"))
-        list.add(DrawerMenu(R.drawable.ic_menu, "About App"))
-        list.add(DrawerMenu(R.drawable.ic_menu, "Share App"))
-        list.add(DrawerMenu(R.drawable.ic_menu, "Setting"))
-        list.add(DrawerMenu(R.drawable.ic_menu, "Contact Us"))
+        list.add(DrawerMenu(R.drawable.ic_account, getString(R.string.account)))
+        list.add(DrawerMenu(R.drawable.ic_my_order, getString(R.string.my_orders)))
+        list.add(DrawerMenu(R.drawable.ic_notification, getString(R.string.notification)))
+        list.add(DrawerMenu(R.drawable.ic_points, getString(R.string.points)))
+        list.add(DrawerMenu(R.drawable.ic_wallet, getString(R.string.wallet)))
         adapter.setData(list)
     }
 

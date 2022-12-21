@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">DrawerMenu</string>
-    <string name="name">Eng.Ibrahim Mrq</string>
+    <string name="name">Ibrahim Mrq</string>
+    <string name="power_by">Power By: Ibrahim Mrq</string>
     <string name="phone">+972592440530</string>
 
 
@@ -8,5 +9,6 @@
     <string name="points">Points</string>
     <string name="my_orders">My Orders</string>
     <string name="notification">Notifications</string>
+    <string name="account">Account</string>
 
 </resources>
