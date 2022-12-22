@@ -6,34 +6,36 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Color.blue
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.Window
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class CustomDrawer : FrameLayout {
 
     private var context: Activity? = null
+
     private var layoutFront: ConstraintLayout? = null
+    private var layoutFrontBackgroundOpen: Int = R.drawable.shape_front
+    private var layoutFrontBackgroundClose: Int = R.color.ora
+    private var isLayoutFrontClickToClose = true
+
     private var layoutBack: ConstraintLayout? = null
     private var view: ImageView? = null
 
-    private var layoutFrontBackgroundOpen: Int = R.drawable.shape_front
-    private var layoutFrontBackgroundClose: Int = R.color.ora
-
-    private var statusBarColorWhenClose: Int = R.color.ora
-    private var statusBarColorWhenOpen: Int = R.color.blue
-
-    private var isLayoutFrontClickToClose = true
     private var isChangeMenuIconToBackIcon = true
     private var isAnimationRight = false
-    private var isChangeStatusBarColorWhenOpenOrColes = true
     private var isOpen = false
+
+    private var isChangeStatusBarColorWhenOpenOrColes = true
+    private var statusBarColorWhenClose: Int = R.color.ora
+    private var statusBarColorWhenOpen: Int = R.color.blue
 
     private var duration: Int = 1000
 
@@ -114,6 +116,21 @@ class CustomDrawer : FrameLayout {
         return this
     }
 
+    fun isChangeStatusBarColorWhenOpenOrColes(isChange: Boolean): CustomDrawer {
+        this.isChangeStatusBarColorWhenOpenOrColes = isChange
+        return this
+    }
+
+    fun setStatusBarColorWhenClose(color: Int): CustomDrawer {
+        this.statusBarColorWhenClose = color
+        return this
+    }
+
+    fun setStatusBarColorWhenOpen(color: Int): CustomDrawer {
+        this.statusBarColorWhenOpen = color
+        return this
+    }
+
     fun isLayoutFrontClickToClose(isLayoutFrontClickToClose: Boolean): CustomDrawer {
         this.isLayoutFrontClickToClose = isLayoutFrontClickToClose
         return this
@@ -184,6 +201,7 @@ class CustomDrawer : FrameLayout {
         val bottomMargin: Int
         val valueAnimator: ValueAnimator
         val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
         context!!.windowManager.defaultDisplay.getMetrics(metrics)
         val width = metrics.widthPixels.toFloat()
         val height = metrics.heightPixels.toFloat()
@@ -206,28 +224,20 @@ class CustomDrawer : FrameLayout {
             if (isOpen) {
                 layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
             } else {
-                Handler().postDelayed({
-                    layoutFront!!.setBackgroundResource(
-                        layoutFrontBackgroundClose
-                    )
+                Handler(Looper.myLooper()!!).postDelayed({
+                    layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
                 }, 500)
             }
         }
         valueAnimator.start()
 
-        animationRight(x, y, onAnimationFinish)
+        animation(x, y, onAnimationFinish)
         changeMenuIconToBackIcon()
-
-        if (isChangeStatusBarColorWhenOpenOrColes) {
-            changeStatusBarColor(statusBarColorWhenOpen)
-        }
-        if (isChangeStatusBarColorWhenOpenOrColes) {
-            changeStatusBarColor(statusBarColorWhenClose)
-        }
+        changeStatusBarColorOpen()
 
     }
 
-    private fun animationRight(x: Float, y: Float, onAnimationFinish: () -> Unit) {
+    private fun animation(x: Float, y: Float, onAnimationFinish: () -> Unit) {
         if (!isAnimationRight) {
             layoutFront!!.animate().translationX(x).translationY(y).setDuration(duration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
@@ -236,6 +246,7 @@ class CustomDrawer : FrameLayout {
                         layoutFront!!.isEnabled = true
                         view!!.isEnabled = true
                         onAnimationFinish()
+                        changeStatusBarColorColes()
                     }
                 })
         } else {
@@ -246,6 +257,7 @@ class CustomDrawer : FrameLayout {
                         layoutFront!!.isEnabled = true
                         view!!.isEnabled = true
                         onAnimationFinish()
+                        changeStatusBarColorColes()
                     }
                 })
         }
@@ -254,27 +266,43 @@ class CustomDrawer : FrameLayout {
     private fun changeMenuIconToBackIcon() {
         if (isChangeMenuIconToBackIcon) {
             if (isOpen) {
-                view!!.animate().alpha(0f).setDuration(400).rotation(-90f)
+                view!!.animate().alpha(0f).setDuration(200).rotation(-90f)
                     .withEndAction {
                         view!!.setImageResource(R.drawable.ic_arrow_back)
-                        view!!.animate().alpha(1f).setDuration(400).rotation(0f)
+                        view!!.animate().alpha(1f).setDuration(200).rotation(0f)
                             .start()
                     }.start()
             } else {
-                view!!.animate().alpha(0f).setDuration(400).rotation(90f)
+                view!!.animate().alpha(0f).setDuration(200).rotation(90f)
                     .withEndAction {
                         view!!.setImageResource(R.drawable.ic_menu)
-                        view!!.animate().alpha(1f).setDuration(400).rotation(0f)
+                        view!!.animate().alpha(1f).setDuration(200).rotation(0f)
                             .start()
                     }.start()
             }
         }
     }
 
-    private fun changeStatusBarColor(color: Int) {
+    private fun changeStatusBarColorOpen() {
+        if (isChangeStatusBarColorWhenOpenOrColes) {
+            if (isOpen) {
+                changeStatusBarColor(statusBarColorWhenOpen)
+            }
+        }
+    }
+
+    private fun changeStatusBarColorColes() {
+        if (isChangeStatusBarColorWhenOpenOrColes) {
+            if (!isOpen) {
+                changeStatusBarColor(statusBarColorWhenClose)
+            }
+        }
+    }
+
+    private fun changeStatusBarColor(@ColorRes color: Int) {
         val window: Window = context!!.window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = color
+        window.statusBarColor = resources.getColor(color, context!!.theme)
     }
 
 }
