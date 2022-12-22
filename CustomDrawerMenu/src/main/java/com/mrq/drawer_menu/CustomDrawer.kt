@@ -186,11 +186,63 @@ class CustomDrawer : FrameLayout {
         }
     }
 
-    fun closeMenu(onAnimationFinish: () -> Unit) {
+    fun closeMenuWhenAnimationFinish(onAnimationFinish: () -> Unit) {
         if (isOpen) {
             isOpen = false
             animation(onAnimationFinish)
         }
+    }
+
+    fun closeMenu(onAnimationFinish: () -> Unit) {
+        if (isOpen) {
+            isOpen = false
+            animation()
+            onAnimationFinish()
+        }
+    }
+
+    private fun animation() {
+        layoutFront!!.isEnabled = false
+        view!!.isEnabled = false
+        val x: Float
+        val y: Float
+        val bottomMargin: Int
+        val valueAnimator: ValueAnimator
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        context!!.windowManager.defaultDisplay.getMetrics(metrics)
+        val width = metrics.widthPixels.toFloat()
+        val height = metrics.heightPixels.toFloat()
+        if (isOpen) {
+            x = width / 2.5f
+            y = height / 3.6f
+            bottomMargin = (height / 2).toInt() - 300
+            valueAnimator = ValueAnimator.ofInt(bottomMargin)
+        } else {
+            x = 0f
+            y = 0f
+            bottomMargin = (height / 2).toInt() - 300
+            valueAnimator = ValueAnimator.ofInt(bottomMargin, 0)
+        }
+        valueAnimator.duration = duration.toLong()
+        valueAnimator.addUpdateListener { animation: ValueAnimator ->
+            val layoutParams = layoutFront!!.layoutParams as LayoutParams
+            layoutParams.bottomMargin = (animation.animatedValue as Int)
+            layoutFront!!.layoutParams = layoutParams
+            if (isOpen) {
+                layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
+            } else {
+                Handler(Looper.myLooper()!!).postDelayed({
+                    layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
+                }, 500)
+            }
+        }
+        valueAnimator.start()
+
+        animation(x, y)
+        changeMenuIconToBackIcon()
+        changeStatusBarColorOpen()
+
     }
 
     private fun animation(onAnimationFinish: () -> Unit) {
@@ -235,6 +287,30 @@ class CustomDrawer : FrameLayout {
         changeMenuIconToBackIcon()
         changeStatusBarColorOpen()
 
+    }
+
+    private fun animation(x: Float, y: Float) {
+        if (!isAnimationRight) {
+            layoutFront!!.animate().translationX(x).translationY(y).setDuration(duration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        super.onAnimationEnd(animation)
+                        layoutFront!!.isEnabled = true
+                        view!!.isEnabled = true
+                        changeStatusBarColorColes()
+                    }
+                })
+        } else {
+            layoutFront!!.animate().translationX(-x).translationY(y).setDuration(duration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        super.onAnimationEnd(animation)
+                        layoutFront!!.isEnabled = true
+                        view!!.isEnabled = true
+                        changeStatusBarColorColes()
+                    }
+                })
+        }
     }
 
     private fun animation(x: Float, y: Float, onAnimationFinish: () -> Unit) {

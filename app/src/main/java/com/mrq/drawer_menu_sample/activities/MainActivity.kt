@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDrawerMenuList() {
-        replaceFragment(HomeFragment())
+        replaceFragment(HomeFragment.newInstance(getString(R.string.home)))
         val adapter = DrawerMenuAdapter(this)
         adapter.listener = object : DrawerMenuAdapter.DrawerMenuInterface {
             override fun onItemSelected(model: DrawerMenu, position: Int) {
@@ -77,13 +77,18 @@ class MainActivity : AppCompatActivity() {
         backBinding.recyclerview.setHasFixedSize(true)
         backBinding.recyclerview.layoutManager = LinearLayoutManager(this)
         val list = arrayListOf<DrawerMenu>()
-        list.add(DrawerMenu(R.drawable.ic_home, getString(R.string.home), null, HomeFragment()))
+        list.add(
+            DrawerMenu(
+                R.drawable.ic_home, getString(R.string.home), null,
+                HomeFragment.newInstance(getString(R.string.home))
+            )
+        )
         list.add(
             DrawerMenu(
                 R.drawable.ic_account,
                 getString(R.string.account),
                 null,
-                HomeFragment()
+                HomeFragment.newInstance(getString(R.string.account))
             )
         )
         list.add(
@@ -91,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_my_order,
                 getString(R.string.my_orders),
                 null,
-                HomeFragment()
+                HomeFragment.newInstance(getString(R.string.my_orders))
             )
         )
         list.add(
@@ -99,17 +104,31 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_notification,
                 getString(R.string.notification),
                 null,
-                HomeFragment()
+                HomeFragment.newInstance(getString(R.string.notification))
             )
         )
-        list.add(DrawerMenu(R.drawable.ic_points, getString(R.string.points), null, HomeFragment()))
-        list.add(DrawerMenu(R.drawable.ic_wallet, getString(R.string.wallet), null, HomeFragment()))
+        list.add(
+            DrawerMenu(
+                R.drawable.ic_points,
+                getString(R.string.points),
+                null,
+                HomeFragment.newInstance(getString(R.string.points))
+            )
+        )
+        list.add(
+            DrawerMenu(
+                R.drawable.ic_wallet,
+                getString(R.string.wallet),
+                null,
+                HomeFragment.newInstance(getString(R.string.wallet))
+            )
+        )
         list.add(
             DrawerMenu(
                 R.drawable.ic_favorite,
                 getString(R.string.favorite),
                 null,
-                HomeFragment()
+                HomeFragment.newInstance(getString(R.string.favorite))
             )
         )
         list.add(
@@ -117,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_contact_us,
                 getString(R.string.contact_us),
                 null,
-                HomeFragment()
+                HomeFragment.newInstance(getString(R.string.contact_us))
             )
         )
         list.add(
