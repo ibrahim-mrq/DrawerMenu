@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
+    android:background="@color/white"
     tools:context=".fragments.HomeFragment">
 
     <TextView
@@ -14,7 +14,7 @@
         android:gravity="center"
         android:text="@string/hello_blank_fragment"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="@color/blue"
         android:textSize="18sp"
         android:textStyle="bold" />
 

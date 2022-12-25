@@ -2,6 +2,7 @@ package com.mrq.drawer_menu_sample.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -54,9 +55,11 @@ class DrawerMenuAdapter(val context: Context) :
         }
 
         holder.itemView.setOnClickListener {
-            if (selectedPosition >= 0) notifyItemChanged(selectedPosition)
-            selectedPosition = holder.adapterPosition
-            notifyItemChanged(selectedPosition)
+            if (model.activity == null) {
+                if (selectedPosition >= 0) notifyItemChanged(selectedPosition)
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(selectedPosition)
+            }
             listener!!.onItemSelected(model, position)
         }
     }

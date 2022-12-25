@@ -6,16 +6,20 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.Window
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
 
 class CustomDrawer : FrameLayout {
 
@@ -36,6 +40,8 @@ class CustomDrawer : FrameLayout {
     private var isChangeStatusBarColorWhenOpenOrColes = true
     private var statusBarColorWhenClose: Int = R.color.ora
     private var statusBarColorWhenOpen: Int = R.color.blue
+    private var statusBarDarkWhenOpen = false
+    private var statusBarDarkWhenClose = true
 
     private var duration: Int = 1000
 
@@ -48,11 +54,8 @@ class CustomDrawer : FrameLayout {
         setAttribute(styleable)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    ) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int)
+            : super(context, attrs, defStyleAttr) {
         val styleable = context.theme.obtainStyledAttributes(attrs, R.styleable.CustomDrawer, 0, 0)
         setAttribute(styleable)
     }
@@ -133,6 +136,16 @@ class CustomDrawer : FrameLayout {
 
     fun isLayoutFrontClickToClose(isLayoutFrontClickToClose: Boolean): CustomDrawer {
         this.isLayoutFrontClickToClose = isLayoutFrontClickToClose
+        return this
+    }
+
+    fun isStatusBarDarkWhenOpen(statusBarDarkWhenOpen: Boolean): CustomDrawer {
+        this.statusBarDarkWhenOpen = statusBarDarkWhenOpen
+        return this
+    }
+
+    fun isStatusBarDarkWhenClose(statusBarDarkWhenClose: Boolean): CustomDrawer {
+        this.statusBarDarkWhenClose = statusBarDarkWhenClose
         return this
     }
 
@@ -230,19 +243,27 @@ class CustomDrawer : FrameLayout {
             layoutParams.bottomMargin = (animation.animatedValue as Int)
             layoutFront!!.layoutParams = layoutParams
             if (isOpen) {
+                if (statusBarDarkWhenOpen) {
+                    statusBarDark()
+                } else {
+                    statusBarLight()
+                }
                 layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
             } else {
                 Handler(Looper.myLooper()!!).postDelayed({
+                    if (statusBarDarkWhenClose) {
+                        statusBarDark()
+                    } else {
+                        statusBarLight()
+                    }
                     layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
                 }, 500)
             }
         }
         valueAnimator.start()
-
         animation(x, y)
         changeMenuIconToBackIcon()
         changeStatusBarColorOpen()
-
     }
 
     private fun animation(onAnimationFinish: () -> Unit) {
@@ -274,19 +295,27 @@ class CustomDrawer : FrameLayout {
             layoutParams.bottomMargin = (animation.animatedValue as Int)
             layoutFront!!.layoutParams = layoutParams
             if (isOpen) {
+                if (statusBarDarkWhenOpen) {
+                    statusBarDark()
+                } else {
+                    statusBarLight()
+                }
                 layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
             } else {
                 Handler(Looper.myLooper()!!).postDelayed({
+                    if (statusBarDarkWhenClose) {
+                        statusBarDark()
+                    } else {
+                        statusBarLight()
+                    }
                     layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
                 }, 500)
             }
         }
         valueAnimator.start()
-
         animation(x, y, onAnimationFinish)
         changeMenuIconToBackIcon()
         changeStatusBarColorOpen()
-
     }
 
     private fun animation(x: Float, y: Float) {
@@ -381,4 +410,27 @@ class CustomDrawer : FrameLayout {
         window.statusBarColor = resources.getColor(color, context!!.theme)
     }
 
+    private fun statusBarLight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context!!.window.insetsController?.setSystemBarsAppearance(
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            context!!.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
+    private fun statusBarDark() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context!!.window.insetsController?.setSystemBarsAppearance(
+                0,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            context!!.window.decorView.systemUiVisibility = 0
+        }
+    }
 }

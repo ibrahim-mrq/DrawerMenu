@@ -40,8 +40,10 @@ class MainActivity : AppCompatActivity() {
             .setAnimationRight(false)
             // Status Bar Color
             .isChangeStatusBarColorWhenOpenOrColes(true)
-            .setStatusBarColorWhenClose(R.color.blue) // like layoutFront background color
+            .setStatusBarColorWhenClose(R.color.white) // like layoutFront background color
             .setStatusBarColorWhenOpen(R.color.blue) // like layoutBack background color
+            .isStatusBarDarkWhenOpen(true)
+            .isStatusBarDarkWhenClose(false)
             // Layout Front Operation
             .setLayoutFrontBackgroundOpen(R.drawable.shape_front)
             .setLayoutFrontBackgroundClose(R.color.white)
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = DrawerMenuAdapter(this)
         adapter.listener = object : DrawerMenuAdapter.DrawerMenuInterface {
             override fun onItemSelected(model: DrawerMenu, position: Int) {
-                binding.parent.closeMenu {
+                binding.parent.closeMenuWhenAnimationFinish {
                     if (model.activity != null) {
                         startActivity(Intent(this@MainActivity, model.activity!!::class.java))
                     } else {
@@ -153,6 +155,7 @@ class MainActivity : AppCompatActivity() {
     fun replaceFragment(fragment: Fragment?) {
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
+        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
         transaction.replace(R.id.fragment, fragment!!)
         transaction.commit()
     }
