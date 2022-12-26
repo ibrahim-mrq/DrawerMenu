@@ -37,16 +37,16 @@ class MainActivity : AppCompatActivity() {
             .layoutFront(frontBinding.root) // layout.xml
             .layoutBack(backBinding.root) // layout.xml
             // Set Animation Lift Or Right
-            .setAnimationRight(false)
+            .setAnimationRight(true)
             // Status Bar Color
             .isChangeStatusBarColorWhenOpenOrColes(true)
-            .setStatusBarColorWhenClose(R.color.white) // like layoutFront background color
+            .setStatusBarColorWhenClose(R.color.ora) // like layoutFront background color
             .setStatusBarColorWhenOpen(R.color.blue) // like layoutBack background color
             .isStatusBarDarkWhenOpen(true)
             .isStatusBarDarkWhenClose(false)
             // Layout Front Operation
             .setLayoutFrontBackgroundOpen(R.drawable.shape_front)
-            .setLayoutFrontBackgroundClose(R.color.white)
+            .setLayoutFrontBackgroundClose(R.color.ora)
             .isLayoutFrontClickToClose(true)
             .setOnLayoutFrontClickToClose(onAnimationFinish = {
                 Toast.makeText(this, "onAnimationFinish", Toast.LENGTH_SHORT).show()
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
     fun replaceFragment(fragment: Fragment?) {
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
-        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
         transaction.replace(R.id.fragment, fragment!!)
         transaction.commit()
     }

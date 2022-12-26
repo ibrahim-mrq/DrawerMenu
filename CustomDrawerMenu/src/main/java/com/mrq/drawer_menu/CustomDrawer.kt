@@ -179,6 +179,13 @@ class CustomDrawer : FrameLayout {
         }
         if (layoutFront != null) {
             parent.addView(layoutFront, paramsFront)
+            layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
+            if (statusBarDarkWhenOpen) {
+                statusBarDark()
+            } else {
+                statusBarLight()
+            }
+            changeStatusBarColor(statusBarColorWhenClose)
         }
 
         if (view != null) {
