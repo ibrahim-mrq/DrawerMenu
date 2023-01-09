@@ -16,9 +16,13 @@ import com.mrq.drawer_menu_sample.model.DrawerMenu
 
 class MainActivity : AppCompatActivity() {
 
+    private val adapter by lazy { DrawerMenuAdapter() }
     private lateinit var binding: ActivityMainBinding
     private lateinit var backBinding: LayoutBackBinding
     private lateinit var frontBinding: LayoutFrontBinding
+
+    private var toast: Toast? = null
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             .layoutFront(frontBinding.root) // layout.xml
             .layoutBack(backBinding.root) // layout.xml
             // Set Animation Lift Or Right
-            .setAnimationRight(true)
+            .setAnimationRight(false)
             // Status Bar Color
             .isChangeStatusBarColorWhenOpenOrColes(true)
             .setStatusBarColorWhenClose(R.color.ora) // like layoutFront background color
@@ -62,7 +66,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initDrawerMenuList() {
         replaceFragment(HomeFragment.newInstance(getString(R.string.home)))
-        val adapter = DrawerMenuAdapter(this)
         adapter.listener = object : DrawerMenuAdapter.DrawerMenuInterface {
             override fun onItemSelected(model: DrawerMenu, position: Int) {
                 binding.parent.closeMenuWhenAnimationFinish {
@@ -78,6 +81,10 @@ class MainActivity : AppCompatActivity() {
         backBinding.recyclerview.adapter = adapter
         backBinding.recyclerview.setHasFixedSize(true)
         backBinding.recyclerview.layoutManager = LinearLayoutManager(this)
+        adapter.setData(setData())
+    }
+
+    private fun setData(): ArrayList<DrawerMenu> {
         val list = arrayListOf<DrawerMenu>()
         list.add(
             DrawerMenu(
@@ -149,7 +156,7 @@ class MainActivity : AppCompatActivity() {
                 null
             )
         )
-        adapter.setData(list)
+        return list
     }
 
     fun replaceFragment(fragment: Fragment?) {
@@ -158,5 +165,21 @@ class MainActivity : AppCompatActivity() {
 //        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
         transaction.replace(R.id.fragment, fragment!!)
         transaction.commit()
+    }
+
+    override fun onBackPressed() {
+        if (binding.parent.isOpen()) {
+            binding.parent.closeMenu()
+        } else {
+            if (backPressedTime + 2000 > System.currentTimeMillis()) {
+                toast!!.cancel()
+                super.onBackPressed()
+                finish()
+            } else {
+                toast = Toast.makeText(this, getString(R.string.back_exit), Toast.LENGTH_SHORT)
+                toast!!.show()
+            }
+            backPressedTime = System.currentTimeMillis()
+        }
     }
 }

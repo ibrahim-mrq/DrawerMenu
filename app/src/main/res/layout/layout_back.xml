@@ -47,8 +47,8 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/photo"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="fitXY"
+                android:layout_height="45dp"
+                android:scaleType="centerCrop"
                 android:theme="@style/roundImageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

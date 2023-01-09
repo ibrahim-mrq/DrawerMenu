@@ -19,7 +19,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.WindowCompat
 
 class CustomDrawer : FrameLayout {
 
@@ -170,6 +169,11 @@ class CustomDrawer : FrameLayout {
         return this
     }
 
+
+    fun isOpen(): Boolean {
+        return isOpen
+    }
+
     fun build() {
         val parent = FrameLayout(context!!)
         val paramsFront = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -180,11 +184,8 @@ class CustomDrawer : FrameLayout {
         if (layoutFront != null) {
             parent.addView(layoutFront, paramsFront)
             layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
-            if (statusBarDarkWhenOpen) {
-                statusBarDark()
-            } else {
-                statusBarLight()
-            }
+            statusBarDark(statusBarDarkWhenOpen)
+            statusBarDark(statusBarDarkWhenClose)
             changeStatusBarColor(statusBarColorWhenClose)
         }
 
@@ -221,6 +222,13 @@ class CustomDrawer : FrameLayout {
         }
     }
 
+    fun closeMenu() {
+        if (isOpen) {
+            isOpen = false
+            animation()
+        }
+    }
+
     private fun animation() {
         layoutFront!!.isEnabled = false
         view!!.isEnabled = false
@@ -250,19 +258,11 @@ class CustomDrawer : FrameLayout {
             layoutParams.bottomMargin = (animation.animatedValue as Int)
             layoutFront!!.layoutParams = layoutParams
             if (isOpen) {
-                if (statusBarDarkWhenOpen) {
-                    statusBarDark()
-                } else {
-                    statusBarLight()
-                }
+                statusBarDark(statusBarDarkWhenOpen)
                 layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
             } else {
                 Handler(Looper.myLooper()!!).postDelayed({
-                    if (statusBarDarkWhenClose) {
-                        statusBarDark()
-                    } else {
-                        statusBarLight()
-                    }
+                    statusBarDark(statusBarDarkWhenClose)
                     layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
                 }, 500)
             }
@@ -302,19 +302,11 @@ class CustomDrawer : FrameLayout {
             layoutParams.bottomMargin = (animation.animatedValue as Int)
             layoutFront!!.layoutParams = layoutParams
             if (isOpen) {
-                if (statusBarDarkWhenOpen) {
-                    statusBarDark()
-                } else {
-                    statusBarLight()
-                }
+                statusBarDark(statusBarDarkWhenOpen)
                 layoutFront!!.setBackgroundResource(layoutFrontBackgroundOpen)
             } else {
                 Handler(Looper.myLooper()!!).postDelayed({
-                    if (statusBarDarkWhenClose) {
-                        statusBarDark()
-                    } else {
-                        statusBarLight()
-                    }
+                    statusBarDark(statusBarDarkWhenClose)
                     layoutFront!!.setBackgroundResource(layoutFrontBackgroundClose)
                 }, 500)
             }
@@ -417,27 +409,28 @@ class CustomDrawer : FrameLayout {
         window.statusBarColor = resources.getColor(color, context!!.theme)
     }
 
-    private fun statusBarLight() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context!!.window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
+    private fun statusBarDark(statusBarDark: Boolean) {
+        if (statusBarDark) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                context!!.window.insetsController?.setSystemBarsAppearance(
+                    0,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context!!.window.decorView.systemUiVisibility = 0
+            }
         } else {
-            @Suppress("DEPRECATION")
-            context!!.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                context!!.window.insetsController?.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context!!.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
         }
     }
 
-    private fun statusBarDark() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context!!.window.insetsController?.setSystemBarsAppearance(
-                0,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            context!!.window.decorView.systemUiVisibility = 0
-        }
-    }
 }
