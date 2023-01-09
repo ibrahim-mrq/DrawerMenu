@@ -1,7 +1,6 @@
 package com.mrq.drawer_menu_sample.adapters
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,12 +15,11 @@ import com.mrq.drawer_menu_sample.databinding.CustomDrawerMenuBinding
 import com.mrq.drawer_menu_sample.model.DrawerMenu
 
 @SuppressLint("NotifyDataSetChanged")
-class DrawerMenuAdapter(val context: Context) :
-    RecyclerView.Adapter<DrawerMenuAdapter.DrawerMenuViewHolder>() {
+class DrawerMenuAdapter : RecyclerView.Adapter<DrawerMenuAdapter.DrawerMenuViewHolder>() {
 
-    var list = emptyList<DrawerMenu>()
+    private var list = emptyList<DrawerMenu>()
+    private var selectedPosition = 0
     var listener: DrawerMenuInterface? = null
-    var selectedPosition = 0
 
     class DrawerMenuViewHolder(val binding: CustomDrawerMenuBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -54,9 +52,11 @@ class DrawerMenuAdapter(val context: Context) :
         }
 
         holder.itemView.setOnClickListener {
-            if (selectedPosition >= 0) notifyItemChanged(selectedPosition)
-            selectedPosition = holder.adapterPosition
-            notifyItemChanged(selectedPosition)
+            if (model.activity == null) {
+                if (selectedPosition >= 0) notifyItemChanged(selectedPosition)
+                selectedPosition = holder.adapterPosition
+                notifyItemChanged(selectedPosition)
+            }
             listener!!.onItemSelected(model, position)
         }
     }
@@ -65,7 +65,7 @@ class DrawerMenuAdapter(val context: Context) :
         return list.size
     }
 
-    fun setData(newList: List<DrawerMenu>) {
+    fun setData(newList: ArrayList<DrawerMenu>) {
         list = newList
         notifyDataSetChanged()
     }

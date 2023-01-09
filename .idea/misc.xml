@@ -5,11 +5,22 @@
       <map>
         <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/CustomDrawerMenu/src/main/res/drawable/change_menu_icon_to_arrow.xml" value="0.1415" />
         <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/CustomDrawerMenu/src/main/res/drawable/ic_menu.xml" value="0.1415" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/CustomDrawerMenu/src/main/res/drawable/shape_front.xml" value="0.1415" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_account.xml" value="0.12" />
         <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_close.xml" value="0.1415" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_home.xml" value="0.1415" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_menu.xml" value="0.12" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_search.xml" value="0.12" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/ic_wallet.xml" value="0.1415" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/drawable/shape_front.xml" value="0.1415" />
         <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/activity_main.xml" value="0.259375" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/activity_setting.xml" value="0.2453125" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/content_appbar.xml" value="0.136" />
         <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/custom_drawer_menu.xml" value="0.152" />
-        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/layout_back.xml" value="0.144" />
-        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/layout_front.xml" value="0.259375" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/fragment_blank.xml" value="0.259375" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/fragment_home.xml" value="0.259375" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/layout_back.xml" value="0.176" />
+        <entry key="..\:/Users/aboma/AndroidStudioProjects/Repositories/DrawerMenu/app/src/main/res/layout/layout_front.xml" value="0.25" />
       </map>
     </option>
   </component>

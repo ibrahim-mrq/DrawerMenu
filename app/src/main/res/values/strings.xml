@@ -4,11 +4,17 @@
     <string name="power_by">Power By: Ibrahim Mrq</string>
     <string name="phone">+972592440530</string>
 
+    <string name="favorite">Favorite</string>
+    <string name="setting">Setting</string>
+    <string name="contact_us">Contact Us</string>
 
     <string name="wallet">Wallet</string>
     <string name="points">Points</string>
     <string name="my_orders">My Orders</string>
     <string name="notification">Notifications</string>
     <string name="account">Account</string>
+    <string name="home">Home</string>
+
+    <string name="back_exit">Press back again to exit.</string>
 
 </resources>
